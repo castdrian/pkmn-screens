@@ -1,0 +1,43 @@
+{
+  "name": "team-preview",
+  "version": "1.0.0",
+  "description": "Pokémon team preview image generator",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc -p ./",
+    "prepare": "npm run build",
+    "postversion": "git push && git push --tags"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrifcastr/team-preview.git"
+  },
+  "keywords": [
+    "Pokémon",
+    "team",
+    "preview",
+    "generator",
+    "showdown",
+    "summary"
+  ],
+  "author": "adrifcastr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrifcastr/team-preview/issues"
+  },
+  "homepage": "https://github.com/adrifcastr/team-preview#readme",
+  "dependencies": {
+    "@discordjs/collection": "^0.1.6",
+    "@pencil.js/canvas-gif-encoder": "github:pencil-js/canvas-gif-encoder",
+    "@pkmn/data": "^0.4.6",
+    "@pkmn/dex": "^0.4.6",
+    "@pkmn/sets": "^2.0.0",
+    "@types/node": "^15.9.0",
+    "skia-canvas": "^0.9.21",
+    "tslib": "^2.2.0",
+    "typescript": "^4.3.2"
+  }
+}
