@@ -2,14 +2,16 @@
   "name": "team-preview",
   "version": "1.0.0",
   "description": "Pokémon team preview image generator",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "npx tsc -p ./",
     "prepare": "npm run build",
     "postversion": "git push && git push --tags"
   },
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "data/**/*"
   ],
   "repository": {
     "type": "git",
@@ -37,6 +39,7 @@
     "@pkmn/sets": "^2.0.0",
     "@types/node": "^15.9.0",
     "@types/skia-canvas": "^0.9.0",
+    "canvas-constructor": "github:kyranet/canvas-constructor#build",
     "skia-canvas": "^0.9.21",
     "tslib": "^2.2.0",
     "typescript": "^4.3.2"
