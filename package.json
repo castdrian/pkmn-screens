@@ -37,9 +37,12 @@
     "@pkmn/data": "^0.4.6",
     "@pkmn/dex": "^0.4.6",
     "@pkmn/sets": "^2.0.0",
+    "@types/gifencoder": "^2.0.1",
     "@types/node": "^15.9.0",
     "@types/skia-canvas": "^0.9.0",
     "canvas-constructor": "github:kyranet/canvas-constructor#build",
+    "gif-frames": "^1.0.1",
+    "gifencoder": "^2.0.1",
     "skia-canvas": "^0.9.21",
     "tslib": "^2.2.0",
     "typescript": "^4.3.2"

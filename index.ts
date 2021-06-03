@@ -1,10 +1,14 @@
 import Collection from '@discordjs/collection';
 import type { PokemonSet } from '@pkmn/sets';
 import type { Move } from '@pkmn/data';
+import type { Image } from 'skia-canvas';
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
 import path from 'path';
 import { Canvas, loadImage, FontLibrary } from 'skia-canvas';
+import GIFEncoder from 'gifencoder';
+//@ts-ignore
+import gifFrames from 'gif-frames';
 
 export async function  summaryScreen(data: PokemonSet, options?: { animated: boolean }): Promise<Buffer> {
 	FontLibrary.use('gamefont', [
@@ -69,15 +73,31 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 	ctx.fillText(movedata[2].pp + '/' + movedata[2].pp, 480, 232);
 	ctx.fillText(movedata[3].pp + '/' + movedata[3].pp, 480, 289);
 
-	if (shiny) {
-		const sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`);
-		ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
+	let sprite: Image;
+	if (shiny) sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`);
+	else sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani/${species.toLowerCase()}.gif`);
+
+	let buffer: Buffer;
+	if (options && options.animated) {
+		const GIF = new GIFEncoder(1200, 675);
+        GIF.start();
+        GIF.setRepeat(0);
+
+		const frames = await gifFrames({ url: `https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`, frames: 'all', outputType: 'png', cumulative: true });
+		console.log(frames);
+		frames.forEach(async (f: any) => {
+			ctx.drawImage(f.getImage(), 720, 250, sprite.width*3, sprite.height*3);
+			GIF.addFrame(ctx);
+		}); 
+		GIF.finish();
+		console.log(GIF.out.getData());
+		buffer = canvas.toBuffer('jpg');
 	} else {
-		const sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani/${species.toLowerCase()}.gif`);
 		ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
+		buffer = canvas.toBuffer('jpg');
 	}
 
-	return canvas.toBuffer('jpg');
+	return buffer;
 }
 
 export async function partyScreen(data: PokemonSet[] | Collection<String, PokemonSet>, options?: { animated: boolean }): Promise<any> {
