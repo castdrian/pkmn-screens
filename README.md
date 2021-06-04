@@ -21,6 +21,7 @@ npm i @pkmn/sets
 import { Sets } from '@pkmn/sets';
 import { summaryScreen, partyScreen } from 'team-preview';
 
+//Pokémon Showdown! set
 const set = Sets.importSet(
 `Gekkouga (Greninja) (M) @ Choice Scarf  
  Ability: Protean  
@@ -53,5 +54,18 @@ const buffer = await summaryScreen(set, { animated: true });
 
 ## Generate a static party preview
 
+```ts
+import { summaryScreen, partyScreen } from 'team-preview';
+
+//array or collection of 6 sets
+const buffer = await partyScreen(sets);
+```
 
 ## Generate an animated party preview
+
+```ts
+import { summaryScreen, partyScreen } from 'team-preview';
+
+//array or collection of 6 sets
+const buffer = await partyScreen(sets, { animated: true });
+```
