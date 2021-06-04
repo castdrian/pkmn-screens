@@ -23,16 +23,16 @@ import { summaryScreen, partyScreen } from 'team-preview';
 
 //Pokémon Showdown! set
 const set = Sets.importSet(
-`Gekkouga (Greninja) (M) @ Choice Scarf  
- Ability: Protean  
+`Gekkouga (Greninja-Ash) (M) @ Choice Specs  
+ Ability: Battle Bond  
  Level: 100  
  Shiny: Yes  
  Pokeball: Cherish Ball  
- EVs: 176 Atk / 80 SpA / 252 Spe  
- Hasty Nature  
- - Rock Slide  
- - U-turn  
- - Ice Beam  
+ EVs: 252 SpA / 4 SpD / 252 Spe
+ Timid Nature
+ - Hydro Pump
+ - Dark Pulse
+ - Water Shuriken
  - Spikes
 `);
 
@@ -40,7 +40,7 @@ const buffer = await summaryScreen(set);
 ```
 
 Result:
-![Greninja Static](https://cdn.discordapp.com/attachments/715564004621418577/850150281261481984/summary.jpg)
+![Greninja Static](https://cdn.discordapp.com/attachments/715564004621418577/850339032663326740/summary.gif)
 
 
 ## Generate an animated summary

@@ -8,7 +8,10 @@ import path from 'path';
 import { Canvas, loadImage, FontLibrary } from 'skia-canvas';
 import GIFEncoder from 'gifencoder';
 //@ts-ignore
-import gifFrames from 'gif-frames';
+import extractFrames from 'gif2sprite';
+import fetch from 'node-fetch';
+import fs from 'fs';
+import { Stream } from 'stream';
 
 export async function  summaryScreen(data: PokemonSet, options?: { animated: boolean }): Promise<Buffer> {
 	FontLibrary.use('gamefont', [
@@ -79,19 +82,36 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 
 	let buffer: Buffer;
 	if (options && options.animated) {
-		const GIF = new GIFEncoder(1200, 675);
-        GIF.start();
-        GIF.setRepeat(0);
+		const opts = {
+			alphaThreshold: 0.1,
+			quality: 1,
+		};
 
-		const frames = await gifFrames({ url: `https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`, frames: 'all', outputType: 'png', cumulative: true });
+		const encoder = new GIFEncoder(width, height);
+		let gif = encoder.createReadStream().pipe(fs.createWriteStream('summary.gif'));
+
+		encoder.start();
+		encoder.setRepeat(0);
+		encoder.setDelay(500);
+		encoder.setQuality(10);
+
+		const response = await fetch(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`);
+  		const buf = await response.buffer();
+
+		const frames = await extractFrames({
+			input: buf,
+			type: 'image/gif',
+		});
+
 		console.log(frames);
+
 		frames.forEach(async (f: any) => {
-			ctx.drawImage(f.getImage(), 720, 250, sprite.width*3, sprite.height*3);
-			GIF.addFrame(ctx);
+			ctx.drawImage(f, 720, 250, sprite.width*3, sprite.height*3);
+			encoder.addFrame(ctx);
 		}); 
-		GIF.finish();
-		console.log(GIF.out.getData());
-		buffer = canvas.toBuffer('jpg');
+
+		encoder.finish();
+		buffer = await stream2buffer(gif);
 	} else {
 		ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
 		buffer = canvas.toBuffer('jpg');
@@ -103,3 +123,13 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 export async function partyScreen(data: PokemonSet[] | Collection<String, PokemonSet>, options?: { animated: boolean }): Promise<any> {
 
 }
+
+async function stream2buffer( stream: Stream ):Promise<Buffer> {
+    return new Promise<Buffer>( (resolve, reject) => {
+        let _buf = Array<any>()
+    
+        stream.on( 'data', chunk => _buf.push(chunk) )
+        stream.on( 'end', () => resolve(Buffer.concat(_buf)) )
+        stream.on( 'error', err => reject( `error converting stream - ${err}`) )
+    })
+} 
