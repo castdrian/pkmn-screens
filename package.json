@@ -41,6 +41,7 @@
     "@types/node": "^15.9.0",
     "@types/node-fetch": "^2.5.10",
     "@types/skia-canvas": "^0.9.0",
+    "gif-extract-frames": "^1.0.2",
     "gif2sprite": "0.0.2",
     "gifencoder": "^2.0.1",
     "node-fetch": "^2.6.1",

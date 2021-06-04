@@ -2,16 +2,15 @@ import Collection from '@discordjs/collection';
 import type { PokemonSet } from '@pkmn/sets';
 import type { Move } from '@pkmn/data';
 import type { Image } from 'skia-canvas';
+import type { Stream } from 'stream';
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
 import path from 'path';
 import { Canvas, loadImage, FontLibrary } from 'skia-canvas';
 import GIFEncoder from 'gifencoder';
 //@ts-ignore
-import extractFrames from 'gif2sprite';
-import fetch from 'node-fetch';
+import extractFrames from 'gif-extract-frames';
 import fs from 'fs';
-import { Stream } from 'stream';
 
 export async function  summaryScreen(data: PokemonSet, options?: { animated: boolean }): Promise<Buffer> {
 	FontLibrary.use('gamefont', [
@@ -82,11 +81,6 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 
 	let buffer: Buffer;
 	if (options && options.animated) {
-		const opts = {
-			alphaThreshold: 0.1,
-			quality: 1,
-		};
-
 		const encoder = new GIFEncoder(width, height);
 		let gif = encoder.createReadStream().pipe(fs.createWriteStream('summary.gif'));
 
@@ -95,15 +89,12 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 		encoder.setDelay(500);
 		encoder.setQuality(10);
 
-		const response = await fetch(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`);
-  		const buf = await response.buffer();
-
 		const frames = await extractFrames({
-			input: buf,
-			type: 'image/gif',
+			input: `https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`,
 		});
 
 		console.log(frames);
+		console.log('number of frames', frames.shape[0])
 
 		frames.forEach(async (f: any) => {
 			ctx.drawImage(f, 720, 250, sprite.width*3, sprite.height*3);
