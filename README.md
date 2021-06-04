@@ -1,6 +1,20 @@
 # team-preview
 Pokémon team preview image generator
 
+## Install
+
+Install team-preview:
+```
+npm i team-preview
+```
+
+Install the Showdown! set parser:
+
+```
+npm i @pkmn/sets
+```
+
+
 ## Generate a static summary
 
 ```ts
