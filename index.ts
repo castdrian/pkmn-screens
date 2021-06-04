@@ -9,7 +9,7 @@ import path from 'path';
 import { Canvas, loadImage, FontLibrary } from 'skia-canvas';
 import GIFEncoder from 'gifencoder';
 //@ts-ignore
-import extractFrames from 'gif-extract-frames';
+import generateFrames from 'gif-to-png';
 import fs from 'fs';
 
 export async function  summaryScreen(data: PokemonSet, options?: { animated: boolean }): Promise<Buffer> {
@@ -89,14 +89,13 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 		encoder.setDelay(500);
 		encoder.setQuality(10);
 
-		const frames = await extractFrames({
-			input: `https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`,
-		});
+		const frames = await generateFrames(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`, path.join(__dirname, `../data/tmp`));
 
 		console.log(frames);
-		console.log('number of frames', frames.shape[0])
 
 		frames.forEach(async (f: any) => {
+			const frame = await loadImage(path.join(__dirname, f));
+			console.log(frame);
 			ctx.drawImage(f, 720, 250, sprite.width*3, sprite.height*3);
 			encoder.addFrame(ctx);
 		}); 
