@@ -1,8 +1,6 @@
-import Collection from '@discordjs/collection';
 import type { PokemonSet } from '@pkmn/sets';
 import type { Move } from '@pkmn/data';
 import type { Image } from 'skia-canvas';
-import type { Stream } from 'stream';
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
 import path from 'path';
@@ -79,6 +77,57 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	return canvas.toBuffer('jpg');
 }
 
-export async function partyScreen(data: PokemonSet[] | Collection<String, PokemonSet>): Promise<any> {
+export async function partyScreen(data: PokemonSet[]): Promise<Buffer> {
+	FontLibrary.use('gamefont', [
+		path.join(__dirname, '../data/font/OpenSans-Semibold.ttf')
+	]);
 
+	const canvas = new Canvas(1200, 675),
+    ctx = canvas.getContext("2d");
+
+	const gens = new Generations(Dex);
+
+	const bg = await loadImage(path.join(__dirname, '../data/images/templates/party_template.jpg'));
+
+	ctx.drawImage(bg, 0, 0);
+	ctx.font = '25px gamefont'
+
+	const male = await loadImage(path.join(__dirname, '../data/images/icons/genders/male.png'));
+	const female = await loadImage(path.join(__dirname, '../data/images/icons/genders/female.png'));
+
+	let sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${data[0].species.toLowerCase()}.gif`);
+
+	for (let i = 0; i < data.length ; i++) {
+		const { name, species, gender, level } = data[i];
+
+		if (i === 0) {
+			ctx.fillStyle = 'white';
+			ctx.fillText(name !== '' ? name : species, 170, 100);
+			ctx.fillText(level ? 'Lv. ' + level : '', 305, 170);
+			let icon = await loadImage(`https://github.com/itsjavi/pokemon-assets/raw/master/assets/img/pokemon/${data[i].species.toLowerCase()}.png`);
+			ctx.drawImage(icon, 70, 160, icon.width*2, icon.height*2);
+
+			if (gender === 'M') ctx.drawImage(male, 330, 128);
+			else if (gender === 'F') ctx.drawImage(female, 330, 128);
+		}
+		else if (i === 1) {
+
+		}
+		else if (i === 2) {
+
+		}
+		else if (i === 3) {
+
+		}
+		else if (i === 4) {
+
+		}
+		else if (i === 5) {
+
+		}
+	}
+	
+	ctx.drawImage(sprite, 720, 270, sprite.width*3, sprite.height*3);
+
+	return canvas.toBuffer('jpg');
 }
