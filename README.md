@@ -15,7 +15,7 @@ npm i @pkmn/sets
 ```
 
 
-## Generate a static summary
+### Generate a summary
 
 ```ts
 import { Sets } from '@pkmn/sets';
@@ -43,16 +43,7 @@ Result:
 ![Greninja Static](https://cdn.discordapp.com/attachments/715564004621418577/850339032663326740/summary.gif)
 
 
-## Generate an animated summary
-
-```ts
-import { summaryScreen, partyScreen } from 'team-preview';
-
-const buffer = await summaryScreen(set, { animated: true });
-```
-
-
-## Generate a static party preview
+### Generate a party preview
 
 ```ts
 import { summaryScreen, partyScreen } from 'team-preview';
@@ -61,11 +52,13 @@ import { summaryScreen, partyScreen } from 'team-preview';
 const buffer = await partyScreen(sets);
 ```
 
-## Generate an animated party preview
 
-```ts
-import { summaryScreen, partyScreen } from 'team-preview';
+### Donations
 
-//array or collection of 6 sets
-const buffer = await partyScreen(sets, { animated: true });
-```
+Donations are gladly accepted. Please send them to my [Paypal.me](https://www.paypal.me/adrifcastr) or [Patreon](https://www.patreon.com/gideonbot)
+to support the development, and maintenance of this project. Thank you!
+
+
+### Credits
+
+This project currently being owned and maintained by __adrifcastr.__

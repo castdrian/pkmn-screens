@@ -7,19 +7,14 @@ import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
 import path from 'path';
 import { Canvas, loadImage, FontLibrary } from 'skia-canvas';
-import GIFEncoder from 'gifencoder';
-//@ts-ignore
-import generateFrames from 'gif-to-png';
-import fs from 'fs';
 
-export async function  summaryScreen(data: PokemonSet, options?: { animated: boolean }): Promise<Buffer> {
+export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	FontLibrary.use('gamefont', [
 		path.join(__dirname, '../data/font/OpenSans-Semibold.ttf')
 	]);
 
 	const canvas = new Canvas(1200, 675),
-    ctx = canvas.getContext("2d"),
-    { width, height } = canvas;
+    ctx = canvas.getContext("2d");
 
 	const { name, species, pokeball, gender, moves, level, shiny } = data;
 	const gens = new Generations(Dex);
@@ -78,48 +73,12 @@ export async function  summaryScreen(data: PokemonSet, options?: { animated: boo
 	let sprite: Image;
 	if (shiny) sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`);
 	else sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani/${species.toLowerCase()}.gif`);
+	
+	ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
 
-	let buffer: Buffer;
-	if (options && options.animated) {
-		const encoder = new GIFEncoder(width, height);
-		let gif = encoder.createReadStream().pipe(fs.createWriteStream('summary.gif'));
-
-		encoder.start();
-		encoder.setRepeat(0);
-		encoder.setDelay(500);
-		encoder.setQuality(10);
-
-		const frames = await generateFrames(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`, path.join(__dirname, `../data/tmp`));
-
-		console.log(frames);
-
-		frames.forEach(async (f: any) => {
-			const frame = await loadImage(path.join(__dirname, f));
-			console.log(frame);
-			ctx.drawImage(f, 720, 250, sprite.width*3, sprite.height*3);
-			encoder.addFrame(ctx);
-		}); 
-
-		encoder.finish();
-		buffer = await stream2buffer(gif);
-	} else {
-		ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
-		buffer = canvas.toBuffer('jpg');
-	}
-
-	return buffer;
+	return canvas.toBuffer('jpg');
 }
 
-export async function partyScreen(data: PokemonSet[] | Collection<String, PokemonSet>, options?: { animated: boolean }): Promise<any> {
+export async function partyScreen(data: PokemonSet[] | Collection<String, PokemonSet>): Promise<any> {
 
 }
-
-async function stream2buffer( stream: Stream ):Promise<Buffer> {
-    return new Promise<Buffer>( (resolve, reject) => {
-        let _buf = Array<any>()
-    
-        stream.on( 'data', chunk => _buf.push(chunk) )
-        stream.on( 'end', () => resolve(Buffer.concat(_buf)) )
-        stream.on( 'error', err => reject( `error converting stream - ${err}`) )
-    })
-} 
