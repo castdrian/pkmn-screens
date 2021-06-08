@@ -1,5 +1,5 @@
 import type { PokemonSet } from '@pkmn/sets';
-import type { Move } from '@pkmn/data';
+import type { GenerationNum, Move } from '@pkmn/data';
 import type { Image } from 'skia-canvas';
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
@@ -86,6 +86,7 @@ export async function partyScreen(data: PokemonSet[]): Promise<Buffer> {
     ctx = canvas.getContext("2d");
 
 	const gens = new Generations(Dex);
+    const Gen = (num: GenerationNum) => gens.get(num);
 
 	const bg = await loadImage(path.join(__dirname, '../data/images/templates/party_template.jpg'));
 
@@ -102,13 +103,19 @@ export async function partyScreen(data: PokemonSet[]): Promise<Buffer> {
 
 		if (i === 0) {
 			ctx.fillStyle = 'white';
-			ctx.fillText(name !== '' ? name : species, 170, 100);
-			ctx.fillText(level ? 'Lv. ' + level : '', 305, 170);
+			ctx.fillText(name !== '' ? name : species, 135, 135);
+			ctx.fillText(level ? 'Lv. ' + level : '', 315, 180);
 			let icon = await loadImage(`https://github.com/itsjavi/pokemon-assets/raw/master/assets/img/pokemon/${data[i].species.toLowerCase()}.png`);
-			ctx.drawImage(icon, 70, 160, icon.width*2, icon.height*2);
+			ctx.drawImage(icon, 50, 95, icon.width*1.5, icon.height*1.5);
 
-			if (gender === 'M') ctx.drawImage(male, 330, 128);
-			else if (gender === 'F') ctx.drawImage(female, 330, 128);
+			if (gender === 'M') ctx.drawImage(male, 315, 115);
+			else if (gender === 'F') ctx.drawImage(female, 315, 115);
+
+			const base = Gen(8).species.get(data[0].species)?.baseStats ?? Gen(7).species.get(data[0].species)?.baseStats;
+			const nature = Gen(8).natures.get(data[i].nature);
+			const hp = Gen(8).stats.calc('hp', base?.hp as number, 31, data[i].evs.hp, data[i].level, nature);
+
+			ctx.fillText(hp + '/' + hp, 135, 180);
 		}
 		else if (i === 1) {
 
@@ -127,7 +134,7 @@ export async function partyScreen(data: PokemonSet[]): Promise<Buffer> {
 		}
 	}
 	
-	ctx.drawImage(sprite, 720, 270, sprite.width*3, sprite.height*3);
+	ctx.drawImage(sprite, 770, 270, sprite.width*3, sprite.height*3);
 
 	return canvas.toBuffer('jpg');
 }

@@ -40,7 +40,7 @@ const buffer = await summaryScreen(set);
 ```
 
 Result:
-![Greninja Static](https://cdn.discordapp.com/attachments/715564004621418577/850339032663326740/summary.gif)
+![Summary](https://cdn.discordapp.com/attachments/715564004621418577/850339032663326740/summary.gif)
 
 
 ### Generate a party preview
@@ -52,6 +52,8 @@ import { summaryScreen, partyScreen } from 'team-preview';
 const buffer = await partyScreen(sets);
 ```
 
+Result:
+![Party](https://cdn.discordapp.com/attachments/715564004621418577/851890034374344725/summary.jpg);
 
 ### Donations
 
