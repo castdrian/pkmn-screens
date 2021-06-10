@@ -40,7 +40,7 @@ const buffer = await summaryScreen(set);
 ```
 
 Result:
-![Summary](https://cdn.discordapp.com/attachments/715564004621418577/850339032663326740/summary.gif)
+![Summary](https://cdn.discordapp.com/attachments/715564004621418577/852590843357691977/summary.jpg)
 
 
 ### Generate a party preview
@@ -48,12 +48,12 @@ Result:
 ```ts
 import { summaryScreen, partyScreen } from 'team-preview';
 
-//array or collection of 6 sets
-const buffer = await partyScreen(sets);
+//array of 6 sets
+const buffer = await partyScreen([set, set2, set3, set4, set5, set6]);
 ```
 
 Result:
-![Party](https://cdn.discordapp.com/attachments/715564004621418577/851890034374344725/summary.jpg);
+![Party](https://cdn.discordapp.com/attachments/715564004621418577/852590842862501929/party.jpg);
 
 ### Donations
 

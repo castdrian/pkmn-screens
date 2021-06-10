@@ -77,7 +77,9 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	return canvas.toBuffer('jpg');
 }
 
-export async function partyScreen(data: PokemonSet[]): Promise<Buffer> {
+type Party<T> = { 0: T, 1: T, 2: T, 3: T, 4: T, 5: T } & Array<T>
+
+export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
 	FontLibrary.use('gamefont', [
 		path.join(__dirname, '../data/font/OpenSans-Semibold.ttf')
 	]);
@@ -98,43 +100,60 @@ export async function partyScreen(data: PokemonSet[]): Promise<Buffer> {
 
 	let sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${data[0].species.toLowerCase()}.gif`);
 
-	for (let i = 0; i < data.length ; i++) {
+	const drawdata = 
+	[
+		{ 
+			color: 'white', species: { x: 135, y: 135 },
+			lvl: { x: 315, y: 180 }, icon: { x: 50, y: 95 },
+			gender: { x: 315, y: 115 }, hp: { x: 135, y: 180 }
+		},
+		{ 
+			color: 'black', species: { x: 135, y: 225 },
+			lvl: { x: 315, y: 270 }, icon: { x: 50, y: 185 },
+			gender: { x: 315, y: 205 }, hp: { x: 135, y: 270 }
+		},
+		{ 
+			color: 'black', species: { x: 135, y: 315 },
+			lvl: { x: 315, y: 360 }, icon: { x: 50, y: 275 },
+			gender: { x: 315, y: 295 }, hp: { x: 135, y: 360 }
+		},
+		{ 
+			color: 'black', species: { x: 135, y: 405 },
+			lvl: { x: 315, y: 450 }, icon: { x: 50, y: 365 },
+			gender: { x: 315, y: 385 }, hp: { x: 135, y: 450 }
+		},
+		{ 
+			color: 'black', species: { x: 135, y: 495 },
+			lvl: { x: 315, y: 540 }, icon: { x: 50, y: 455 },
+			gender: { x: 315, y: 475 }, hp: { x: 135, y: 540 }
+		},
+		{ 
+			color: 'black', species: { x: 135, y: 585 },
+			lvl: { x: 315, y: 630 }, icon: { x: 50, y: 545 },
+			gender: { x: 315, y: 565 }, hp: { x: 135, y: 630 }
+		},
+	];
+
+	for (let i = 0; i < drawdata.length ; i++) {
 		const { name, species, gender, level } = data[i];
 
-		if (i === 0) {
-			ctx.fillStyle = 'white';
-			ctx.fillText(name !== '' ? name : species, 135, 135);
-			ctx.fillText(level ? 'Lv. ' + level : '', 315, 180);
-			let icon = await loadImage(`https://github.com/itsjavi/pokemon-assets/raw/master/assets/img/pokemon/${data[i].species.toLowerCase()}.png`);
-			ctx.drawImage(icon, 50, 95, icon.width*1.5, icon.height*1.5);
+		ctx.fillStyle = drawdata[i].color;
+		ctx.fillText(name !== '' ? name : species, drawdata[i].species.x, drawdata[i].species.y);
+		ctx.fillText(level ? 'Lv. ' + level : '', drawdata[i].lvl.x, drawdata[i].lvl.y);
+		let icon = await loadImage(`https://github.com/itsjavi/pokemon-assets/raw/master/assets/img/pokemon/${data[i].species.toLowerCase()}.png`);
+		ctx.drawImage(icon, drawdata[i].icon.x, drawdata[i].icon.y, icon.width*1.5, icon.height*1.5);
 
-			if (gender === 'M') ctx.drawImage(male, 315, 115);
-			else if (gender === 'F') ctx.drawImage(female, 315, 115);
+		if (gender === 'M') ctx.drawImage(male, drawdata[i].gender.x, drawdata[i].gender.y);
+		else if (gender === 'F') ctx.drawImage(female, drawdata[i].gender.x, drawdata[i].gender.y);
 
-			const base = Gen(8).species.get(data[0].species)?.baseStats ?? Gen(7).species.get(data[0].species)?.baseStats;
-			const nature = Gen(8).natures.get(data[i].nature);
-			const hp = Gen(8).stats.calc('hp', base?.hp as number, 31, data[i].evs.hp, data[i].level, nature);
+		const base = Gen(8).species.get(data[i].species)?.baseStats ?? Gen(7).species.get(data[i].species)?.baseStats;
+		const nature = Gen(8).natures.get(data[i].nature);
+		const hp = Gen(8).stats.calc('hp', base?.hp as number, 31, data[i].evs.hp, data[i].level, nature);
 
-			ctx.fillText(hp + '/' + hp, 135, 180);
-		}
-		else if (i === 1) {
-
-		}
-		else if (i === 2) {
-
-		}
-		else if (i === 3) {
-
-		}
-		else if (i === 4) {
-
-		}
-		else if (i === 5) {
-
-		}
+		ctx.fillText(hp + '/' + hp, drawdata[i].hp.x, drawdata[i].hp.y);
 	}
-	
-	ctx.drawImage(sprite, 770, 270, sprite.width*3, sprite.height*3);
+
+	ctx.drawImage(sprite, 725, 270, sprite.width*3, sprite.height*3);
 
 	return canvas.toBuffer('jpg');
 }
