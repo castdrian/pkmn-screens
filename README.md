@@ -53,7 +53,7 @@ const buffer = await partyScreen([set, set2, set3, set4, set5, set6]);
 ```
 
 Result:
-![Party](https://cdn.discordapp.com/attachments/715564004621418577/852590842862501929/party.jpg)
+![Party](https://cdn.discordapp.com/attachments/715564004621418577/852597065372532747/party.jpg)
 
 ### Donations
 

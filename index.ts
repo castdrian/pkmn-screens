@@ -14,7 +14,9 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	const canvas = new Canvas(1200, 675),
     ctx = canvas.getContext("2d");
 
-	const { name, species, pokeball, gender, moves, level, shiny } = data;
+	let { name, species, pokeball, gender, moves, level, shiny } = data;
+	level ? level = level : level = 100;
+
 	const gens = new Generations(Dex);
 
 	const bg = await loadImage(path.join(__dirname, '../data/images/templates/summary_template.jpg'));
@@ -28,7 +30,7 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	ctx.fillStyle = 'white';
 	ctx.font = '25px gamefont'
 	ctx.fillText(name !== '' ? name : species, 723, 60);
-	ctx.fillText(level ? 'Lv. ' + level : '', 963, 60);
+	ctx.fillText('Lv. ' + level, 963, 60);
 
 	if (pokeball) {
 		const ball = await loadImage(path.join(__dirname, `../data/images/icons/balls/${pokeball.replace(' ', '').toLowerCase()}.png`));
@@ -135,11 +137,12 @@ export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
 	];
 
 	for (let i = 0; i < drawdata.length ; i++) {
-		const { name, species, gender, level } = data[i];
+		let { name, species, gender, level } = data[i];
+		level ? level = level : level = 100;
 
 		ctx.fillStyle = drawdata[i].color;
 		ctx.fillText(name !== '' ? name : species, drawdata[i].species.x, drawdata[i].species.y);
-		ctx.fillText(level ? 'Lv. ' + level : '', drawdata[i].lvl.x, drawdata[i].lvl.y);
+		ctx.fillText('Lv. ' + level, drawdata[i].lvl.x, drawdata[i].lvl.y);
 		let icon = await loadImage(`https://github.com/itsjavi/pokemon-assets/raw/master/assets/img/pokemon/${data[i].species.toLowerCase()}.png`);
 		ctx.drawImage(icon, drawdata[i].icon.x, drawdata[i].icon.y, icon.width*1.5, icon.height*1.5);
 
