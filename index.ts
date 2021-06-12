@@ -1,6 +1,6 @@
 import type { PokemonSet } from '@pkmn/sets';
 import type { GenerationNum, Move } from '@pkmn/data';
-import type { Image } from 'skia-canvas';
+import { Sprites } from '@pkmn/img';
 import { Dex } from '@pkmn/dex';
 import { Generations } from '@pkmn/data';
 import path from 'path';
@@ -18,7 +18,6 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	level ? level = level : level = 100;
 
 	const gens = new Generations(Dex);
-
 	const bg = await loadImage(path.join(__dirname, '../data/images/templates/summary_template.jpg'));
 
 	let movedata: Move[] = [];
@@ -70,9 +69,8 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	ctx.fillText(movedata[2].pp + '/' + movedata[2].pp, 480, 232);
 	ctx.fillText(movedata[3].pp + '/' + movedata[3].pp, 480, 289);
 
-	let sprite: Image;
-	if (shiny) sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${species.toLowerCase()}.gif`);
-	else sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani/${species.toLowerCase()}.gif`);
+	const { url } = Sprites.getPokemon(data.species, { gen: 'ani', shiny });
+	const sprite = await loadImage(url);
 	
 	ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
 
@@ -100,7 +98,8 @@ export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
 	const male = await loadImage(path.join(__dirname, '../data/images/icons/genders/male.png'));
 	const female = await loadImage(path.join(__dirname, '../data/images/icons/genders/female.png'));
 
-	let sprite = await loadImage(`https://play.pokemonshowdown.com/sprites/ani-shiny/${data[0].species.toLowerCase()}.gif`);
+	const { url } = Sprites.getPokemon(data[0].species, { gen: 'ani', shiny: data[0].shiny });
+	const sprite = await loadImage(url);
 
 	const drawdata = 
 	[
@@ -136,7 +135,7 @@ export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
 		},
 	];
 
-	for (let i = 0; i < drawdata.length ; i++) {
+	for (let i = 0; i < data.length ; i++) {
 		let { name, species, gender, level } = data[i];
 		level ? level = level : level = 100;
 
