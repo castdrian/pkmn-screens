@@ -21,9 +21,7 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	const bg = await loadImage(path.join(__dirname, '../data/images/templates/summary_template.jpg'));
 
 	let movedata: Move[] = [];
-	for (const item of moves) {
-		movedata.push(gens.get(8).moves.get(item) as Move);
-	}
+	for (const item of moves) movedata.push(gens.get(8).moves.get(item) as Move);
 	
 	ctx.drawImage(bg, 0, 0);
 	ctx.fillStyle = 'white';
@@ -31,47 +29,31 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	ctx.fillText(name !== '' ? name : species, 723, 60);
 	ctx.fillText('Lv. ' + level, 963, 60);
 
-	if (pokeball) {
-		const ball = await loadImage(path.join(__dirname, `../data/images/icons/balls/${pokeball.replace(' ', '').toLowerCase()}.png`));
-		ctx.drawImage(ball, 618, 30, 45, 45);
-	} else {
-		const ball = await loadImage(path.join(__dirname, '../data/images/icons/balls/pokeball.png'));
-		ctx.drawImage(ball, 618, 30, 45, 45);
-	}
+	const defaultball = await loadImage(path.join(__dirname, '../data/images/icons/balls/pokeball.png'));
+	const ball = await loadImage(path.join(__dirname, `../data/images/icons/balls/${pokeball?.replace(' ', '').toLowerCase()}.png`));
+	pokeball ? ctx.drawImage(ball, 618, 30, 45, 45) : ctx.drawImage(defaultball, 618, 30, 45, 45);
 
-	if (gender === 'M') {
-		const male = await loadImage(path.join(__dirname, '../data/images/icons/genders/male.png'));
-		ctx.drawImage(male, 1100, 40);
-	} else if (gender === 'F') {
-		const female = await loadImage(path.join(__dirname, '../data/images/icons/genders/female.png'));
-		ctx.drawImage(female, 1100, 40);
-	}
-
-	ctx.fillStyle = 'black';
-	ctx.fillText(movedata[0].name, 66, 114);
-	ctx.fillText(movedata[1].name, 66, 174);
-	ctx.fillText(movedata[2].name, 66, 232);
-	ctx.fillText(movedata[3].name, 66, 289);
+	const male = await loadImage(path.join(__dirname, '../data/images/icons/genders/male.png'));
+	const female = await loadImage(path.join(__dirname, '../data/images/icons/genders/female.png'));
+	gender === 'M' ? ctx.drawImage(male, 1100, 40) : ctx.drawImage(female, 1100, 40);
 
 	const type1 = await loadImage(path.join(__dirname, `../data/images/icons/types/${movedata[0].type.toLowerCase()}.jpg`));
 	const type2 = await loadImage(path.join(__dirname, `../data/images/icons/types/${movedata[1].type.toLowerCase()}.jpg`));
 	const type3 = await loadImage(path.join(__dirname, `../data/images/icons/types/${movedata[2].type.toLowerCase()}.jpg`));
 	const type4 = await loadImage(path.join(__dirname, `../data/images/icons/types/${movedata[3].type.toLowerCase()}.jpg`));
 
-	ctx.drawImage(type1, 320, 92, 125, 28);
-	ctx.drawImage(type2, 320, 150, 125, 28);
-	ctx.drawImage(type3, 320, 209, 125, 28);
-	ctx.drawImage(type4, 320, 267, 125, 28);
+	const drawdata = [{ img: type1, movey: 114, typey: 92, ppy: 114 }, { img: type2, movey: 174, typey: 150, ppy: 174 }, { img: type3, movey: 232, typey: 209, ppy: 232 }, { img: type4, movey: 289, typey: 267, ppy: 289 }];
 
-	ctx.fillStyle = 'white';
-	ctx.fillText(movedata[0].pp + '/' + movedata[0].pp, 480, 114);
-	ctx.fillText(movedata[1].pp + '/' + movedata[1].pp, 480, 174);
-	ctx.fillText(movedata[2].pp + '/' + movedata[2].pp, 480, 232);
-	ctx.fillText(movedata[3].pp + '/' + movedata[3].pp, 480, 289);
+	for (let i = 0; i < moves.length ; i++) {
+		ctx.fillStyle = 'black';
+		ctx.fillText(movedata[i].name, 66, drawdata[i].movey);
+		ctx.drawImage(drawdata[i].img, 320, drawdata[i].typey, 125, 28);
+		ctx.fillStyle = 'white';
+		ctx.fillText(movedata[i].pp + '/' + movedata[i].pp, 480, drawdata[i].ppy);
+	}
 
 	const { url } = Sprites.getPokemon(data.species, { gen: 'ani', shiny });
 	const sprite = await loadImage(url);
-	
 	ctx.drawImage(sprite, 720, 250, sprite.width*3, sprite.height*3);
 
 	return canvas.toBuffer('jpg');
@@ -144,9 +126,7 @@ export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
 		ctx.fillText('Lv. ' + level, drawdata[i].lvl.x, drawdata[i].lvl.y);
 		let icon = await loadImage(`https://github.com/itsjavi/pokemon-assets/raw/master/assets/img/pokemon/${data[i].species.toLowerCase()}.png`);
 		ctx.drawImage(icon, drawdata[i].icon.x, drawdata[i].icon.y, icon.width*1.5, icon.height*1.5);
-
-		if (gender === 'M') ctx.drawImage(male, drawdata[i].gender.x, drawdata[i].gender.y);
-		else if (gender === 'F') ctx.drawImage(female, drawdata[i].gender.x, drawdata[i].gender.y);
+		gender === 'M' ? ctx.drawImage(male, drawdata[i].gender.x, drawdata[i].gender.y) : ctx.drawImage(female, drawdata[i].gender.x, drawdata[i].gender.y);
 
 		const base = Gen(8).species.get(data[i].species)?.baseStats ?? Gen(7).species.get(data[i].species)?.baseStats;
 		const nature = Gen(8).natures.get(data[i].nature);

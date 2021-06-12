@@ -8,12 +8,6 @@ Install team-preview:
 npm i team-preview
 ```
 
-Install the Showdown! set parser:
-
-```
-npm i @pkmn/sets
-```
-
 
 ### Generate a summary
 
