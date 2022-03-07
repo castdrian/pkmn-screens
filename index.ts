@@ -59,7 +59,7 @@ export async function  summaryScreen(data: PokemonSet): Promise<Buffer> {
 	return canvas.toBuffer('jpg');
 }
 
-type Party<T> = { 0: T, 1: T, 2: T, 3: T, 4: T, 5: T } & Array<T>
+export type Party<T> = { 0: T, 1: T, 2: T, 3: T, 4: T, 5: T } & Array<T>
 
 export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
 	FontLibrary.use('gamefont', [
