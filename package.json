@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "npx tsc -p ./ -w",
     "build": "npx tsc -p ./",
-    "prepare": "npm run build",
     "postversion": "git push && git push --tags",
     "prepack": "npx tsc -p ./"
   },
