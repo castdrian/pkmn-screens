@@ -1,6 +1,6 @@
 import type { PokemonSet } from '@pkmn/sets'
 import type { GenerationNum, Move } from '@pkmn/data'
-import { Sprites, Icons } from '@pkmn/img'
+import { Sprites } from '@pkmn/img'
 import { Dex } from '@pkmn/dex'
 import { Generations } from '@pkmn/data'
 import path from 'path'
@@ -221,7 +221,8 @@ export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
       drawdata[i].species.y
     )
     ctx.fillText('Lv. ' + level, drawdata[i].lvl.x, drawdata[i].lvl.y)
-    let icon = await loadImage(Icons.getPokemon(data[i].species).url)
+	let icon = await loadImage(`https://raw.githubusercontent.com/msikma/pokesprite/master/icons/pokemon/regular/${data[i].species.toLowerCase()}.png`).catch(() => loadImage(`https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/${data[i].species.toLowerCase()}.png`)).catch(() => loadImage(`https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen7x/regular/${data[i].species.toLowerCase()}.png`))
+
     ctx.drawImage(
       icon,
       drawdata[i].icon.x,
