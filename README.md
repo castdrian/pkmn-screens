@@ -65,8 +65,7 @@ const set = Sets.importSet(
 + const buffer = await summaryScreen(set, true);
 ```
 
-Result:
-![Summary](https://i.imgur.com/snFal5k.gif)
+Result: https://i.imgur.com/snFal5k.gif
 </details>
 
 ### Generate a party preview
@@ -96,8 +95,7 @@ import { summaryScreen, partyScreen } from 'team-preview';
 + const buffer = await partyScreen([set, set2, set3, set4, set5, set6], true);
 ```
 
-Result:
-![Party](https://i.imgur.com/AtQ2bGK.gif)
+Result: https://i.imgur.com/AtQ2bGK.gif
 </details>
 
 
