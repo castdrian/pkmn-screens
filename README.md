@@ -108,4 +108,4 @@ to support the development, and maintenance of this project. Thank you!
 
 ### Credits
 
-This project currently being owned and maintained by __adrifcastr.__
+This project currently being owned and maintained by __castdrian.__
