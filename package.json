@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "debug": "npx tsc -p ./ && node test.js",
-    "dev": "npx tsc -p ./ -w",
+    "dev": "npx tsc -p ./ && node src/debug.mjs",
     "build": "npx tsc -p ./",
     "postversion": "git push && git push --tags",
     "prepack": "npx tsc -p ./"
@@ -27,7 +26,7 @@
     "showdown",
     "summary"
   ],
-  "author": "adrifcastr",
+  "author": "castdrian",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/adrifcastr/team-preview/issues"
