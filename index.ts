@@ -3,10 +3,16 @@ import type { GenerationNum, Move } from '@pkmn/data'
 import { Sprites } from '@pkmn/img'
 import { Dex } from '@pkmn/dex'
 import { Generations } from '@pkmn/data'
-import path from 'path'
+import path from 'path';
 import { Canvas, loadImage, FontLibrary, Image } from 'skia-canvas'
+// @ts-ignore
+import gifFrames from 'gif-frames'
+import { tmpdir } from 'os'
+import { createWriteStream } from 'fs'
+import GIFEncoder from 'gifencoder';
+import { writeFile } from 'fs/promises'
 
-export async function summaryScreen(data: PokemonSet, pp?: number[]): Promise<Buffer> {
+export async function summaryScreen(data: PokemonSet, anim?: boolean, pp?: number[]): Promise<Buffer> {
   FontLibrary.use('gamefont', [
     path.join(__dirname, '../data/font/OpenSans-Semibold.ttf'),
   ])
@@ -41,10 +47,9 @@ export async function summaryScreen(data: PokemonSet, pp?: number[]): Promise<Bu
         ?.replace(' ', '')
         .toLowerCase()}.png`
     )
-  )
-  pokeball
-    ? ctx.drawImage(ball, 618, 30, 45, 45)
-    : ctx.drawImage(defaultball, 618, 30, 45, 45)
+  ).catch(() => defaultball)
+
+  ctx.drawImage(ball, 618, 30, 45, 45)
 
   const male = await loadImage(
     path.join(__dirname, '../data/images/icons/genders/male.png')
@@ -114,9 +119,14 @@ export async function summaryScreen(data: PokemonSet, pp?: number[]): Promise<Bu
 
   const { url } = Sprites.getPokemon(data.species, { gen: 'ani', shiny })
   const sprite = await loadImage(url)
-  ctx.drawImage(sprite, 720, 250, sprite.width * 3, sprite.height * 3)
 
-  return canvas.toBuffer('jpg')
+  if (!anim) ctx.drawImage(sprite, 600, 100, sprite.width * 3, sprite.height * 3);
+  const buffer = await canvas.toBuffer('png')
+  
+  if (anim) return generateGIF(buffer, url, sprite, 600, 100)
+  else {
+	return buffer
+  }
 }
 
 export type Party<PokemonSet> = {
@@ -128,7 +138,7 @@ export type Party<PokemonSet> = {
   5: PokemonSet
 } & Array<PokemonSet>
 
-export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
+export async function partyScreen(data: Party<PokemonSet>, anim?: boolean): Promise<Buffer> {
   FontLibrary.use('gamefont', [
     path.join(__dirname, '../data/font/OpenSans-Semibold.ttf'),
   ])
@@ -250,7 +260,43 @@ export async function partyScreen(data: Party<PokemonSet>): Promise<Buffer> {
     ctx.fillText(hp + '/' + hp, drawdata[i].hp.x, drawdata[i].hp.y)
   }
 
-  ctx.drawImage(sprite, 725, 270, sprite.width * 3, sprite.height * 3)
+  if (!anim) ctx.drawImage(sprite, 600, 100, sprite.width * 3, sprite.height * 3);
+  const buffer = await canvas.toBuffer('png')
 
-  return canvas.toBuffer('jpg')
+  if (anim) return generateGIF(buffer, url, sprite, 600, 100)
+  else {
+	return buffer
+  }
+}
+
+async function generateGIF(buffer: Buffer, url: string, sprite: Image, x: number, y: number): Promise<Buffer> {
+	const filename = `${tmpdir()}/${Math.random().toString()}_n.png`
+	await writeFile(filename, buffer)
+	const gif = await gifFrames({ url, frames: 'all', outputType: 'png' })
+
+	console.log('Extracting frames...');
+	const images = await Promise.all(gif.map((img: any, index: number) => {
+		const file = filename.replace('_n', `_${index}`)
+		const stream = createWriteStream(file)
+		img.getImage().pipe(stream)
+		return new Promise<string>((res) => stream.on('finish', () => res(file)))
+	}))
+
+	console.log('Generating GIF...');
+
+	const GIF = new GIFEncoder(1200, 675)
+	GIF.start()
+	GIF.setRepeat(0)
+
+	for (const image of images) {
+		console.log(`Drawing frame ${images.indexOf(image)} of ${images.length}...`);
+		const canvas = new Canvas(1200, 675)
+		const bg = await loadImage(filename);
+		const ctx = canvas.getContext('2d')
+		ctx.drawImage(bg, 0, 0)
+		ctx.drawImage(await loadImage(image), x, y, sprite.width*3, sprite.height*3)
+		GIF.addFrame(ctx as any)
+	}
+
+	return GIF.out.getData()
 }
