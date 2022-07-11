@@ -12,6 +12,13 @@ import { tmpdir } from 'os';
 import { createWriteStream } from 'fs';
 import GIFEncoder from 'gifencoder';
 import { writeFile } from 'fs/promises';
+import {
+  drawdata,
+  type drawobj,
+  type IconData,
+  movexy,
+  type Party,
+} from './constants';
 
 export async function summaryScreen(
   data: PokemonSet,
@@ -66,7 +73,7 @@ export async function summaryScreen(
     ? ctx.drawImage(male, 1100, 40)
     : ctx.drawImage(female, 1100, 40);
 
-  const Data: { [T in 'type1' | 'type2' | 'type3' | 'type4']?: Image } = {};
+  const Data: IconData = {};
 
   for (let i = 0; i < movedata.length; i++)
     Data[`type${i + 1}` as 'type1'] = await loadImage(
@@ -76,42 +83,14 @@ export async function summaryScreen(
       ),
     );
 
-  const arr = [
-    {
-      movey: 114,
-      typey: 92,
-      ppy: 114,
-    },
-    {
-      movey: 174,
-      typey: 150,
-      ppy: 174,
-    },
-    {
-      movey: 232,
-      typey: 209,
-      ppy: 232,
-    },
-    {
-      movey: 289,
-      typey: 267,
-      ppy: 289,
-    },
-  ];
-
-  const drawdata: {
-    img: Image;
-    movey: number;
-    typey: number;
-    ppy: number;
-  }[] = [];
+  const drawdata: drawobj[] = [];
 
   for (let i = 0; i < moves.length; i++)
     drawdata.push({
       img: Data[`type${i + 1}` as 'type1'] as Image,
-      movey: arr[i].movey,
-      typey: arr[i].typey,
-      ppy: arr[i].ppy,
+      movey: movexy[i].movey,
+      typey: movexy[i].typey,
+      ppy: movexy[i].ppy,
     });
 
   for (let i = 0; i < moves.length; i++) {
@@ -138,15 +117,6 @@ export async function summaryScreen(
     return buffer;
   }
 }
-
-export type Party<PokemonSet> = {
-  0: PokemonSet;
-  1: PokemonSet;
-  2: PokemonSet;
-  3: PokemonSet;
-  4: PokemonSet;
-  5: PokemonSet;
-} & Array<PokemonSet>;
 
 export async function partyScreen(
   data: Party<PokemonSet>,
@@ -181,57 +151,6 @@ export async function partyScreen(
     shiny: data[0].shiny,
   });
   const sprite = await loadImage(url);
-
-  const drawdata = [
-    {
-      color: 'white',
-      species: { x: 135, y: 135 },
-      lvl: { x: 315, y: 180 },
-      icon: { x: 70, y: 115 },
-      gender: { x: 315, y: 115 },
-      hp: { x: 135, y: 180 },
-    },
-    {
-      color: 'black',
-      species: { x: 135, y: 225 },
-      lvl: { x: 315, y: 270 },
-      icon: { x: 70, y: 205 },
-      gender: { x: 315, y: 205 },
-      hp: { x: 135, y: 270 },
-    },
-    {
-      color: 'black',
-      species: { x: 135, y: 315 },
-      lvl: { x: 315, y: 360 },
-      icon: { x: 70, y: 295 },
-      gender: { x: 315, y: 295 },
-      hp: { x: 135, y: 360 },
-    },
-    {
-      color: 'black',
-      species: { x: 135, y: 405 },
-      lvl: { x: 315, y: 450 },
-      icon: { x: 70, y: 385 },
-      gender: { x: 315, y: 385 },
-      hp: { x: 135, y: 450 },
-    },
-    {
-      color: 'black',
-      species: { x: 135, y: 495 },
-      lvl: { x: 315, y: 540 },
-      icon: { x: 70, y: 475 },
-      gender: { x: 315, y: 475 },
-      hp: { x: 135, y: 540 },
-    },
-    {
-      color: 'black',
-      species: { x: 135, y: 585 },
-      lvl: { x: 315, y: 630 },
-      icon: { x: 70, y: 565 },
-      gender: { x: 315, y: 565 },
-      hp: { x: 135, y: 630 },
-    },
-  ];
 
   for (let i = 0; i < data.length; i++) {
     let { name, species, gender, level } = data[i];
