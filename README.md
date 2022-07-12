@@ -1,5 +1,5 @@
 # team-preview
-Pokémon team preview image generator
+Pokémon screen image generator
 
 ## Install
 

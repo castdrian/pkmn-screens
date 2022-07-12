@@ -1,7 +1,7 @@
 {
-  "name": "team-preview",
-  "version": "1.2.1",
-  "description": "Pokémon team preview image generator",
+  "name": "pkmn-screens",
+  "version": "1.2.2",
+  "description": "Pokémon screen image generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -16,12 +16,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adrifcastr/team-preview.git"
+    "url": "git+https://github.com/castdrian/pkmn-screens.git"
   },
   "keywords": [
     "Pokémon",
     "team",
-    "preview",
+    "screen",
     "generator",
     "showdown",
     "summary"
@@ -29,9 +29,9 @@
   "author": "castdrian",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/adrifcastr/team-preview/issues"
+    "url": "https://github.com/castdrian/pkmn-screens/issues"
   },
-  "homepage": "https://github.com/adrifcastr/team-preview#readme",
+  "homepage": "https://github.com/castdrian/pkmn-screens#readme",
   "eslintConfig": {
 	"extends": ["standard-typescript-prettier"],
 	"parserOptions": { "project": "./tsconfig.json" }
