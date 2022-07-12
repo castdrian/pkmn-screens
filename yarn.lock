@@ -140,6 +140,13 @@
   "resolved" "https://registry.npmjs.org/@types/node/-/node-17.0.21.tgz"
   "version" "17.0.21"
 
+"@types/progress@^2.0.5":
+  "integrity" "sha512-ZYYVc/kSMkhH9W/4dNK/sLNra3cnkfT2nJyOAIDY+C2u6w72wa0s1aXAezVtbTsnN8HID1uhXCrLwDE2ZXpplg=="
+  "resolved" "https://registry.npmjs.org/@types/progress/-/progress-2.0.5.tgz"
+  "version" "2.0.5"
+  dependencies:
+    "@types/node" "*"
+
 "@types/skia-canvas@^0.9.0":
   "integrity" "sha512-buN0xnXKC2TvCMGdA3uFTzdTXgcyNBbbHwkSOnt9buxhhvz5UXyDEw9oWjm3T1tjFr7M4ycUZZhLSGL+nke6+g=="
   "resolved" "https://registry.npmjs.org/@types/skia-canvas/-/skia-canvas-0.9.28.tgz"
@@ -1786,6 +1793,11 @@
   "integrity" "sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g=="
   "resolved" "https://registry.npmjs.org/prettier/-/prettier-2.7.1.tgz"
   "version" "2.7.1"
+
+"progress@^2.0.3":
+  "integrity" "sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA=="
+  "resolved" "https://registry.npmjs.org/progress/-/progress-2.0.3.tgz"
+  "version" "2.0.3"
 
 "psl@^1.1.28":
   "integrity" "sha512-E/ZsdU4HLs/68gYzgGTkMicWTLPdAftJLfJFlLUAAKZGkStNU72sZjT66SnMDVOfOWY/YAoiD7Jxa9iHvngcag=="

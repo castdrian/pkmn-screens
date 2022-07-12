@@ -8,7 +8,6 @@ Install pkmn-screens:
 npm i pkmn-screens
 ```
 
-
 ### Generate a summary
 
 <details>
@@ -16,7 +15,7 @@ npm i pkmn-screens
   
 ```ts
 import { Sets } from '@pkmn/sets';
-import { summaryScreen, partyScreen } from 'pkmn-screens';
+import { Screens } from 'pkmn-screens';
 
 //Pokémon Showdown! set
 const set = Sets.importSet(
@@ -33,7 +32,7 @@ const set = Sets.importSet(
  - Spikes
 `);
 
-const buffer = await summaryScreen(set);
+const buffer = await Screens.moves({ data: set, anim: false });
 ```
 
 Result:
@@ -45,7 +44,7 @@ Result:
   
 ```diff
 import { Sets } from '@pkmn/sets';
-import { summaryScreen, partyScreen } from 'pkmn-screens';
+import { Screens } from 'pkmn-screens';
 
 //Pokémon Showdown! set
 const set = Sets.importSet(
@@ -61,8 +60,8 @@ const set = Sets.importSet(
  - Roost
 `);
 
-- const buffer = await summaryScreen(set);
-+ const buffer = await summaryScreen(set, true);
+- const buffer = await Screens.moves({ data: set, anim: false });
++ const buffer = await Screens.moves({ data: set, anim: true });
 ```
 
 Result: https://i.imgur.com/snFal5k.gif
@@ -77,7 +76,10 @@ Result: https://i.imgur.com/snFal5k.gif
 import { summaryScreen, partyScreen } from 'pkmn-screens';
 
 //array of 6 sets
-const buffer = await partyScreen([set, set2, set3, set4, set5, set6]);
+const buffer = await Screens.party({
+    data: team.map((s) => Sets.importSet(s)),
+    anim: false,
+  });
 ```
 
 Result:
@@ -91,8 +93,14 @@ Result:
 import { summaryScreen, partyScreen } from 'pkmn-screens';
 
 //array of 6 sets
-- const buffer = await partyScreen([set, set2, set3, set4, set5, set6]);
-+ const buffer = await partyScreen([set, set2, set3, set4, set5, set6], true);
+- const buffer = await Screens.party({
+-    data: team.map((s) => Sets.importSet(s)),
+-    anim: false,
+-  });
++ const buffer = await Screens.party({
++   data: team.map((s) => Sets.importSet(s)),
++   anim: true,
++ });
 ```
 
 Result: https://i.imgur.com/AtQ2bGK.gif

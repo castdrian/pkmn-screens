@@ -1,5 +1,5 @@
 import { Sets } from '@pkmn/sets';
-import { summaryScreen, partyScreen } from '../dist/index.js';
+import { Screens } from '../dist/index.js';
 import { writeFile, mkdir } from 'fs/promises';
 
 const set = Sets.importSet(
@@ -89,24 +89,27 @@ IVs: 0 Atk
 async function gen() {
   await mkdir('out', { recursive: true });
 
-  console.log('Generating static summary screen...');
-  const summary = await summaryScreen(set);
-  await writeFile('./out/summary.png', summary);
+  console.log('Generating static moves screen...');
+  const moves = await Screens.moves({ data: set, anim: false });
+  await writeFile('./out/moves.png', moves);
 
   console.log('Generating static party screen...');
-  const party = await partyScreen(team.map((s) => Sets.importSet(s)));
+  const party = await Screens.party({
+    data: team.map((s) => Sets.importSet(s)),
+    anim: false,
+  });
   await writeFile('./out/party.png', party);
 
-  console.log('Generating animated summary screen...');
-  const summaryAnimated = await summaryScreen(set, true);
-  await writeFile('./out/summary-animated.gif', summaryAnimated);
+  console.log('Generating animated moves screen...');
+  const movesAnim = await Screens.moves({ data: set, anim: true });
+  await writeFile('./out/moves-animated.gif', movesAnim);
 
   console.log('Generating animated party screen...');
-  const partyAnimated = await partyScreen(
-    team.map((s) => Sets.importSet(s)),
-    true,
-  );
-  await writeFile('./out/party-animated.gif', partyAnimated);
+  const partyAnim = await Screens.party({
+    data: team.map((s) => Sets.importSet(s)),
+    anim: true,
+  });
+  await writeFile('./out/party-animated.gif', partyAnim);
 }
 
 (async function main() {
