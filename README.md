@@ -1,11 +1,11 @@
-# team-preview
+# pkmn-screens
 Pokémon screen image generator
 
 ## Install
 
-Install team-preview:
+Install pkmn-screens:
 ```
-npm i team-preview
+npm i pkmn-screens
 ```
 
 
@@ -16,7 +16,7 @@ npm i team-preview
   
 ```ts
 import { Sets } from '@pkmn/sets';
-import { summaryScreen, partyScreen } from 'team-preview';
+import { summaryScreen, partyScreen } from 'pkmn-screens';
 
 //Pokémon Showdown! set
 const set = Sets.importSet(
@@ -45,7 +45,7 @@ Result:
   
 ```diff
 import { Sets } from '@pkmn/sets';
-import { summaryScreen, partyScreen } from 'team-preview';
+import { summaryScreen, partyScreen } from 'pkmn-screens';
 
 //Pokémon Showdown! set
 const set = Sets.importSet(
@@ -74,7 +74,7 @@ Result: https://i.imgur.com/snFal5k.gif
   <summary>Static party preview</summary>
   
   ```ts
-import { summaryScreen, partyScreen } from 'team-preview';
+import { summaryScreen, partyScreen } from 'pkmn-screens';
 
 //array of 6 sets
 const buffer = await partyScreen([set, set2, set3, set4, set5, set6]);
@@ -88,7 +88,7 @@ Result:
   <summary>Animated party preview</summary>
   
 ```diff
-import { summaryScreen, partyScreen } from 'team-preview';
+import { summaryScreen, partyScreen } from 'pkmn-screens';
 
 //array of 6 sets
 - const buffer = await partyScreen([set, set2, set3, set4, set5, set6]);
@@ -102,7 +102,7 @@ Result: https://i.imgur.com/AtQ2bGK.gif
 
 ### Donations
 
-Donations are gladly accepted. Please send them to my [Paypal.me](https://www.paypal.me/adrifcastr) or [Patreon](https://www.patreon.com/gideonbot)
+Donations are gladly accepted. Please send them to my [Paypal.me](https://www.paypal.me/adrifcastr)
 to support the development, and maintenance of this project. Thank you!
 
 
